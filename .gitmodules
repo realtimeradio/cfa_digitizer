@@ -1,0 +1,6 @@
+[submodule "mlib_devel"]
+	path = mlib_devel
+	url = https://github.com/realtimeradio/mlib_devel
+[submodule "wr-cores-Quabo"]
+	path = wr-cores-Quabo
+	url = https://github.com/liuweiseu/wr-cores-Quabo

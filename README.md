@@ -20,3 +20,6 @@ To run:
 You may need to create a new `startsg.local` file if your installation paths differ from that used on the `rtr-dev1` server.
 
 `cfa_digitizer_test.slx` is a Simulink test model, which targets an xc7k70t FPGA,and contains a White Rabbit core, and two 10GbE interfaces.
+This model can be compiled using the standard CASPER flow.
+
+A resource utilization report from an existing compile of this model is available in `cfa_digitizer_test/reports/top_utilization_placed.rpt`

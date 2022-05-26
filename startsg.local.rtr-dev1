@@ -9,5 +9,5 @@ export XILINXD_LICENSE_FILE=/home/jackh/.Xilinx/Xilinx.lic
 export LD_PRELOAD=${LD_PRELOAD}:"/usr/lib/x86_64-linux-gnu/libexpat.so"
 export CASPER_PYTHON_VENV_ON_START=/home/jackh/casper-python3-venv
 
-export WR_QUABO_REPO_PATH=/home/jackh/src/cfa_digitizer/wr-cores-Quabo
+export WR_QUABO_REPO_PATH=/home/jackh/src/cfa_digitizer/quabo_firmware/quabo_master/ip_repo/wr-cores-Quabo
 #############################################

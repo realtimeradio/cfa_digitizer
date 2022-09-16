@@ -4,3 +4,6 @@
 [submodule "quabo_firmware"]
 	path = quabo_firmware
 	url = https://github.com/realtimeradio/quabo_firmware
+[submodule "adze_sw/katcp_devel"]
+	path = adze_sw/katcp_devel
+	url = https://github.com/realtimeradio/katcp_devel

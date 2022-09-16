@@ -7,3 +7,9 @@
 [submodule "adze_sw/katcp_devel"]
 	path = adze_sw/katcp_devel
 	url = https://github.com/realtimeradio/katcp_devel
+[submodule "linux/u-boot"]
+	path = linux/u-boot
+	url = https://github.com/realtimeradio/u-boot
+[submodule "linux/kernelbuildscripts"]
+	path = linux/kernelbuildscripts
+	url = https://github.com/realtimeradio/bb-kernel

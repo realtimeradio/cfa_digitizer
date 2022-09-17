@@ -20,6 +20,106 @@
 		base_dtb_timestamp = __TIMESTAMP__;
 	};
 
+	// GPIO inputs. These are readable from libgpio
+	gpio_keys: fpga_gpio_input {
+		compatible = "gpio-keys";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		autorepeat;
+		FPGA_GPIO_TESTI {
+		        label = "FPGA_GPIO_TESTI";
+		        gpios = <&gpio2 9 GPIO_ACTIVE_HIGH>;
+                        linux,code = <1>;
+		};
+		FPGA_DONE {
+		        label = "FPGA_DONE";
+		        gpios = <&gpio1 27 GPIO_ACTIVE_HIGH>;
+                        linux,code = <1>;
+		};
+		FPGA_INIT_B {
+		        label = "FPGA_INIT_B";
+		        gpios = <&gpio1 28 GPIO_ACTIVE_HIGH>;
+                        linux,code = <1>;
+		};
+	};
+
+        // Really any GPIO Outputs(!) These are writable via /sys/class/leds/
+	leds{
+                pinctrl-names = "default";
+                pinctrl-0 = <&gpio_pins>;
+		compatible = "gpio-leds";
+		FPGA_SMAP_RDRW_B {
+		        label = "FPGA_SMAP_RDRW_B";
+		        gpios = <&gpio1 24 GPIO_ACTIVE_LOW>;
+                        default-state="off";
+		};
+		FPGA_SMAP_CSI {
+		        label = "FPGA_SMAP_CSI";
+		        gpios = <&gpio1 25 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_PROG_B {
+		        label = "FPGA_PROG_B";
+		        gpios = <&gpio1 26 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		//FPGA_INIT_B {
+		//        label = "FPGA_INIT_B";
+		//        gpios = <&gpio1 28 GPIO_ACTIVE_LOW>;
+                //        default-state="off";
+		//};
+		FPGA_CCLK {
+		        label = "FPGA_CCLK";
+		        gpios = <&gpio1 29 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_GPIO_TESTO {
+		        label = "FPGA_GPIO_TESTO";
+		        gpios = <&gpio2 6 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_SMAP_D0 {
+		        label = "FPGA_SMAP_D0";
+		        gpios = <&gpio1 16 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_SMAP_D1 {
+		        label = "FPGA_SMAP_D1";
+		        gpios = <&gpio1 17 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_SMAP_D2 {
+		        label = "FPGA_SMAP_D2";
+		        gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_SMAP_D3 {
+		        label = "FPGA_SMAP_D3";
+		        gpios = <&gpio1 19 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_SMAP_D4 {
+		        label = "FPGA_SMAP_D4";
+		        gpios = <&gpio1 20 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_SMAP_D5 {
+		        label = "FPGA_SMAP_D5";
+		        gpios = <&gpio1 21 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_SMAP_D6 {
+		        label = "FPGA_SMAP_D6";
+		        gpios = <&gpio1 22 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+		FPGA_SMAP_D7 {
+		        label = "FPGA_SMAP_D7";
+		        gpios = <&gpio1 23 GPIO_ACTIVE_HIGH>;
+                        default-state="off";
+		};
+	};
+
 };
 
 &ldo3_reg {
@@ -200,6 +300,75 @@
 			AM33XX_PADCONF(AM335X_PIN_GPMC_AD7, PIN_INPUT_PULLUP, MUX_MODE1) /* gpmc_ad7.mmc1_dat7 */
 		>;
 	};
+
+        // GPIO pins
+	gpio_pins: pinmux-gpio-pins{
+		pinctrl-single,pins = <
+        		// SIP-FPGA selectmap interface & control/status pins
+			AM33XX_IOPAD(0x840, PIN_OUTPUT | MUX_MODE7) /* (R13) gpmc_a0.gpio1[16] SMAP_D0 */
+			AM33XX_IOPAD(0x844, PIN_OUTPUT | MUX_MODE7) /* (V14) gpmc_a1.gpio1[17] SMAP_D1 */
+			AM33XX_IOPAD(0x848, PIN_OUTPUT | MUX_MODE7) /* (U14) gpmc_a2.gpio1[18] SMAP_D2 */
+			AM33XX_IOPAD(0x84c, PIN_OUTPUT | MUX_MODE7) /* (T14) gpmc_a3.gpio1[19] SMAP_D3 */
+			AM33XX_IOPAD(0x850, PIN_OUTPUT | MUX_MODE7) /* (R14) gpmc_a4.gpio1[20] SMAP_D4 */
+			AM33XX_IOPAD(0x854, PIN_OUTPUT | MUX_MODE7) /* (V15) gpmc_a5.gpio1[21] SMAP_D5 */
+			AM33XX_IOPAD(0x858, PIN_OUTPUT | MUX_MODE7) /* (U15) gpmc_a6.gpio1[22] SMAP_D6 */
+			AM33XX_IOPAD(0x85c, PIN_OUTPUT | MUX_MODE7) /* (T15) gpmc_a7.gpio1[23] SMAP_D7 */
+			AM33XX_IOPAD(0x860, PIN_OUTPUT | MUX_MODE7) /* (V16) gpmc_a8.gpio1[24] SMAP_RDWR_B */
+			AM33XX_IOPAD(0x864, PIN_OUTPUT | MUX_MODE7) /* (U16) gpmc_a9.gpio1[25] SMAP_CSI */
+			AM33XX_IOPAD(0x868, PIN_OUTPUT | MUX_MODE7) /* (T16) gpmc_a10.gpio1[26] PROG_B */
+			AM33XX_IOPAD(0x86c, PIN_INPUT_PULLDOWN | MUX_MODE7) /* (V17) gpmc_a11.gpio1[27] DONE */
+			AM33XX_IOPAD(0x878, PIN_INPUT  | MUX_MODE7) /* (U18) gpmc_be1n.gpio1[28] INIT_B */
+			AM33XX_IOPAD(0x87c, PIN_OUTPUT | MUX_MODE7) /* (V6) gpmc_csn0.gpio1[29] CCLK */
+                        // HEADER pins 0 (J12)
+			AM33XX_IOPAD(0x888, PIN_INPUT | MUX_MODE7) /* (T13) gpmc_csn3.gpio2[0] */
+			AM33XX_IOPAD(0x88c, PIN_INPUT | MUX_MODE7) /* (V12) gpmc_clk.gpio2[1] */
+			AM33XX_IOPAD(0x890, PIN_INPUT | MUX_MODE7) /* (R7) gpmc_advn_ale.gpio2[2] */
+			AM33XX_IOPAD(0x894, PIN_INPUT | MUX_MODE7) /* (T7) gpmc_oen_ren.gpio2[3] */
+			AM33XX_IOPAD(0x898, PIN_INPUT | MUX_MODE7) /* (U6) gpmc_wen.gpio2[4] */
+			AM33XX_IOPAD(0x89c, PIN_INPUT | MUX_MODE7) /* (T6) gpmc_be0n_cle.gpio2[5] */
+			AM33XX_IOPAD(0x8a0, PIN_OUTPUT | MUX_MODE7) /* (R1) lcd_data0.gpio2[6] */
+			AM33XX_IOPAD(0x8a4, PIN_INPUT | MUX_MODE7) /* (R2) lcd_data1.gpio2[7] */
+			AM33XX_IOPAD(0x8a8, PIN_INPUT | MUX_MODE7) /* (R3) lcd_data2.gpio2[8] */
+			AM33XX_IOPAD(0x8ac, PIN_INPUT | MUX_MODE7) /* (R4) lcd_data3.gpio2[9] */
+                        // Header pins 1 (J14)
+			AM33XX_IOPAD(0x908, PIN_INPUT | MUX_MODE7) /* (H16) gmii1_col.gpio3[0] */
+			AM33XX_IOPAD(0xa34, PIN_INPUT | MUX_MODE7) /* (F15) USB1_DRVVBUS.gpio3[13] */
+			AM33XX_IOPAD(0x990, PIN_INPUT | MUX_MODE7) /* (A13) mcasp0_aclkx.gpio3[14] */
+			AM33XX_IOPAD(0x994, PIN_INPUT | MUX_MODE7) /* (B13) mcasp0_fsx.gpio3[15] */
+			AM33XX_IOPAD(0x998, PIN_INPUT | MUX_MODE7) /* (D12) mcasp0_axr0.gpio3[16] */
+			AM33XX_IOPAD(0x99c, PIN_INPUT | MUX_MODE7) /* (C12) mcasp0_ahclkr.gpio3[17] */
+			AM33XX_IOPAD(0x9ac, PIN_INPUT | MUX_MODE7) /* (A14) mcasp0_ahclkx.gpio3[21] */
+		>;
+	};
+
+        //// SIP GPIO HEADER 0 (J12)
+	//header0_pins: pinmux-header0-pins {
+	//	pinctrl-single,pins = <
+	//		AM33XX_IOPAD(0x888, PIN_INPUT | MUX_MODE7) /* (T13) gpmc_csn3.gpio2[0] */
+	//		AM33XX_IOPAD(0x88c, PIN_INPUT | MUX_MODE7) /* (V12) gpmc_clk.gpio2[1] */
+	//		AM33XX_IOPAD(0x890, PIN_INPUT | MUX_MODE7) /* (R7) gpmc_advn_ale.gpio2[2] */
+	//		AM33XX_IOPAD(0x894, PIN_INPUT | MUX_MODE7) /* (T7) gpmc_oen_ren.gpio2[3] */
+	//		AM33XX_IOPAD(0x898, PIN_INPUT | MUX_MODE7) /* (U6) gpmc_wen.gpio2[4] */
+	//		AM33XX_IOPAD(0x89c, PIN_INPUT | MUX_MODE7) /* (T6) gpmc_be0n_cle.gpio2[5] */
+	//		AM33XX_IOPAD(0x8a0, PIN_OUTPUT | MUX_MODE7) /* (R1) lcd_data0.gpio2[6] */
+	//		AM33XX_IOPAD(0x8a4, PIN_INPUT | MUX_MODE7) /* (R2) lcd_data1.gpio2[7] */
+	//		AM33XX_IOPAD(0x8a8, PIN_INPUT | MUX_MODE7) /* (R3) lcd_data2.gpio2[8] */
+	//		AM33XX_IOPAD(0x8ac, PIN_INPUT | MUX_MODE7) /* (R4) lcd_data3.gpio2[9] */
+	//	>;
+	//};
+
+        //// SIP GPIO HEADER 1 (J14)
+	//header1_pins: pinmux-header1-pins {
+	//	pinctrl-single,pins = <
+	//		AM33XX_IOPAD(0x908, PIN_INPUT | MUX_MODE7) /* (H16) gmii1_col.gpio3[0] */
+	//		AM33XX_IOPAD(0xa34, PIN_INPUT | MUX_MODE7) /* (F15) USB1_DRVVBUS.gpio3[13] */
+	//		AM33XX_IOPAD(0x990, PIN_INPUT | MUX_MODE7) /* (A13) mcasp0_aclkx.gpio3[14] */
+	//		AM33XX_IOPAD(0x994, PIN_INPUT | MUX_MODE7) /* (B13) mcasp0_fsx.gpio3[15] */
+	//		AM33XX_IOPAD(0x998, PIN_INPUT | MUX_MODE7) /* (D12) mcasp0_axr0.gpio3[16] */
+	//		AM33XX_IOPAD(0x99c, PIN_INPUT | MUX_MODE7) /* (C12) mcasp0_ahclkr.gpio3[17] */
+	//		AM33XX_IOPAD(0x9ac, PIN_INPUT | MUX_MODE7) /* (A14) mcasp0_ahclkx.gpio3[21] */
+	//	>;
+	//};
 };
 
 

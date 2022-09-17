@@ -178,7 +178,7 @@ apt install -y dialog perl
 
 apt install -y sudo apt-utils vim
 
-apt install -y ifupdown net-tools ethtool udev iputils-ping resolvconf wget kmod device-tree-compiler openssh-client openssh-server build-essential cmake git
+apt install -y ifupdown net-tools ethtool udev iputils-ping resolvconf wget kmod device-tree-compiler openssh-client openssh-server build-essential cmake git gpiod libgpiod-dev
 
 echo "# <file system> <dir> <type> <options> <dump> <pass>" > /etc/fstab
 echo "/dev/mmcblk0p1 /boot  vfat   umask=0002,utf8=true  0 0" >> /etc/fstab

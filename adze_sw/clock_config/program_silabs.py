@@ -2,7 +2,7 @@ import sys
 import time
 import smbus
 
-I2CBUS = 2
+I2CBUS = 1
 I2CADDR = 0x6a
 
 

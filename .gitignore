@@ -1,5 +1,6 @@
-vivado*.jou
-vivado*.log
+*.jou
+*.log
+*.autosave
 vivado*.str
 *.log
 .Xil/

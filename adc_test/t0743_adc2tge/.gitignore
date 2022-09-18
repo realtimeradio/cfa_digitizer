@@ -1,0 +1,4 @@
+*
+!.gitignore
+!outputs/
+!outputs/*

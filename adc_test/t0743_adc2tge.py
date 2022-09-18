@@ -140,6 +140,33 @@ class T0743Adc2Tge():
 		y = v[1::2]
 		return x, y
 
+	def get_spectra(self, nacc):
+		"""
+		Get an accumulated power spectrum based on ADC snapshots.
+
+		:param nacc: Number of snapshots to accumulate
+		:type nacc: int
+
+		:return: X, Y; pair of numpy arrays containing accumulated power spectra
+			for ADC channels 0 and 1, respectively.
+		:rtype: (numpy.ndarray, numpy.ndarray)
+		"""
+		Xacc = None
+		Yacc = None
+		for i in range(nacc):
+			x, y = self.get_adc_snapshot(use_pps_trigger=False)
+			X = np.fft.rfft(x)
+			Y = np.fft.rfft(y)
+			if Xacc is None:
+				Xacc = X
+			else:
+				Xacc += X
+			if Yacc is None:
+				Yacc = Y
+			else:
+				Yacc += Y
+		return X, Y
+
 	def reset_adc_overflow(self):
 		"""
 		Reset ADC overflow counters.

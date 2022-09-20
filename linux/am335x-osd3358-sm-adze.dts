@@ -43,6 +43,14 @@
 		};
 	};
 
+	onewire {
+		compatible = "w1-gpio";
+		pinctrl-names = "default";
+		pinctrl-0 = <&onewire_pins>;
+		status = "okay";
+		gpios = <&gpio3 21 0>;
+	};
+
         // Really any GPIO Outputs(!) These are writable via /sys/class/leds/
 	leds{
                 pinctrl-names = "default";
@@ -274,6 +282,8 @@
 		>;
 	};
 
+
+
 	mmc1_pins: pinmux-mmc1-pins {
 		pinctrl-single,pins = <
 			AM33XX_PADCONF(AM335X_PIN_SPI0_CS1, PIN_INPUT, MUX_MODE7) /* (C15) spi0_cs1.gpio0[6] */
@@ -337,6 +347,12 @@
 			AM33XX_IOPAD(0x994, PIN_INPUT | MUX_MODE7) /* (B13) mcasp0_fsx.gpio3[15] */
 			AM33XX_IOPAD(0x998, PIN_INPUT | MUX_MODE7) /* (D12) mcasp0_axr0.gpio3[16] */
 			AM33XX_IOPAD(0x99c, PIN_INPUT | MUX_MODE7) /* (C12) mcasp0_ahclkr.gpio3[17] */
+		>;
+	};
+
+        // ONEWIRE
+	onewire_pins: pinmux-onewire-pins{
+		pinctrl-single,pins = <
 			AM33XX_IOPAD(0x9ac, PIN_INPUT | MUX_MODE7) /* (A14) mcasp0_ahclkx.gpio3[21] */
 		>;
 	};

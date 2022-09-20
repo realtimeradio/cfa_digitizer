@@ -1,3 +1,20 @@
 This software should be run locally on the ADZE board
 
+# `onboot.sh`
 
+Run this script as root on boot to:
+
+ 1. Program Silabs synthesizer
+ 2. Start `tcpborphserver3` (the `katcp` communications server)
+
+# `wr_console.sh`
+
+Run this script to talk to a White Rabbit soft-core CPU on the
+FPGA. This is only possible if the FPGA is programmed with a design
+which includes the WR core.
+
+# `read_onewire_temp.sh`
+
+Run this script to load 1-wire communications modules and query
+the 1-wire temperature sensors. TODO: make driver loading
+automatic

@@ -48,11 +48,16 @@ def run(host, fpgfile,
         logger.warning("Source and destination IPs are not on the same /24 subnet")
     logger.info("Setting packet destination to IP %s:%d, MAC 0x%.12x" % (dest_ip, dest_port, mac_int))
     adze.set_packet_dest(dest_ip, mac_int, port=dest_port)
+    logger.info("Resetting timestamp counters")
+    adze.arm_timestamp_reset()
     if use_wr_pps:
+        logger.info("Setting PPS source to White Rabbit")
         adze.set_pps_source(source="wr")
     else:
+        logger.info("Setting PPS source to internal software-controlled register")
         adze.set_pps_source(source="sw")
     if sync and not use_wr_pps:
+        logger.info("Issuing software controlled PPS trigger")
         adze.issue_sw_pps()
     adze.eth_enable()
 

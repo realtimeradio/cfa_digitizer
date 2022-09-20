@@ -56,6 +56,14 @@ class T0743Adc2Tge():
 			raise RuntimeError("Don't know what .fpg file to program!")
 		self.cfpga.upload_to_ram_and_program(self.fpgfile)
 
+	def arm_timestamp_reset(self):
+		"""
+		Reset timestamp counters on next PPS.
+		"""
+		self.cfpga.write_int("arm_time_reset", 0) # posedge sensitive
+		self.cfpga.write_int("arm_time_reset", 1)
+		self.cfpga.write_int("arm_time_reset", 0)
+
 	def get_wr_pps_count(self):
 		"""
 		Get the number of White Rabbit PPS ticks

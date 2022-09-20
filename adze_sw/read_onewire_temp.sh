@@ -1,10 +1,13 @@
+#! /bin/bash
 
 # Try to unload running drivers
-sudo rmmod w1-gpio
-sudo rmmod w1_therm
+rmmod w1-gpio
+rmmod w1_therm
 
 insmod w1-gpio.ko
 insmod w1_therm.ko
 
+sleep 1
+
 echo "Temperatures, in mC"
-cat /sys/bu/w1/devices/*/temperature
+cat /sys/bus/w1/devices/*/temperature

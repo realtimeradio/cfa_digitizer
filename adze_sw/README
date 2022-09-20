@@ -15,6 +15,6 @@ which includes the WR core.
 
 # `read_onewire_temp.sh`
 
-Run this script to load 1-wire communications modules and query
+Run this script as root to load 1-wire communications modules and query
 the 1-wire temperature sensors. TODO: make driver loading
 automatic

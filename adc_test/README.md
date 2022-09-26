@@ -54,10 +54,6 @@ def decode_packet(raw_udp_payload, nsamples):
 		return t, h, d0, d1
 ```
 
-## Firmware
-
-The Simulink file 
-
 ## Configuring the design
 
 The Simulink design `t0743_adc2tge.slx` may be compiled using the tool versions
@@ -202,3 +198,33 @@ makes no guarantee that there are no missing packets. As such, multiple
 lines in the data file may not represent contiguous samples. The relationship
 between data on successive lines of a data file should be checked by examining
 each line's timestamp value.
+
+### Simple Plotting
+
+The script `t0743_adc2tge_plot_adc.py` provides basic ADC plotting capabilities.
+
+Usage, as described by the `-h` flag:
+
+```
+(casper-python3-venv) jackh@rtr-dev1:~/src/cfa_digitizer/adc_test$ ./t0743_adc2tge_plot_adc.py -h
+usage: t0743_adc2tge_plot_adc.py [-h] [--skipprog] [-n PLOT_SAMPLES] [--pps]
+                                 host fpgfile
+
+Program and initialize a T0743 ADC->10GbE design
+
+positional arguments:
+  host             Hostname / IP of T0743 board
+  fpgfile          .fpgfile to program or /read
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --skipprog       Skip programming .fpg file (default: False)
+  -n PLOT_SAMPLES  If specified, plot only this number of samples (default:
+                   None)
+  --pps            Use this flag to capture samples starting at a PPS edge
+                   (default: False)
+
+```
+
+The maximum number of time samples which may be plotted is 8192. This is set
+by the size of the ADC snapshot buffers in the firmware design.

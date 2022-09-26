@@ -314,4 +314,4 @@ class T0743Adc2Tge():
 		"""
 		assert v > 0, "Header value must be > 0"
 		assert v < 2**16, "Header value must be < 2^16"
-		self.cfpga.write("packetize_header", v)
+		self.cfpga.write_int("packetize_header", v)

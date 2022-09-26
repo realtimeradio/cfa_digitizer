@@ -40,8 +40,8 @@ class T0743Adc2Tge():
 		:type fpgfile: str
 		"""
 		self.fpgfile = fpgfile
-    try:
-		  self.cfpga.get_system_information(fpgfile)
+		try:
+			self.cfpga.get_system_information(fpgfile)
 		except:
 			print("Could not process fpgfile %s. Maybe the FPGA is not programmed yet?")
 

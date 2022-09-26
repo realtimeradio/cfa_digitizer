@@ -41,11 +41,11 @@ def decode_packet(raw_udp_payload, nsamples):
 		HEADER_SIZE = 8 # Number of bytes in timestamp
 		HEADER_FORMAT = "Q" # Python struct format code (unsigned 64-bit)
 		x = struct.unpack(">%s" % HEADER_FORMAT, raw_udp_payload[0:HEADER_SIZE])
-    t = (x >> 16) & (2**48 - 1)
-    h = x & (2**16 - 1)
+		t = (x >> 16) & (2**48 - 1)
+		h = x & (2**16 - 1)
 		# Unpack the rest of the data as ADC samples
 		DATA_FORMAT =	"h" # Python struct format code (signed 16-bit)
-    # Unpack two ADC channels at once
+		# Unpack two ADC channels at once
 		data_payload = struct.unpack(">%d%s" % (2*nsamples, DATA_FORMAT), raw_udp_payload[HEADER_SIZE:])
 		# De-interleave the two ADC channels
 		d0 = data_payload[0::2]

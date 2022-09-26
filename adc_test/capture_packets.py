@@ -18,7 +18,8 @@ SAMPLE_FORMAT = "h"
 def decode_packet(p, nsample):
     x = struct.unpack('>Q', p[0:BASE_HEADER_SIZE])
     h = {}
-    h['t'] = x[0]
+    h['t'] = x[0] >> 16
+    h['header'] = x[0] & 0xffff
     payload_bytes = NSAMPLE_BYTES * NPOL * nsample
     d = np.array(struct.unpack('>%d%s' % (NPOL*nsample, SAMPLE_FORMAT), p[BASE_HEADER_SIZE:]), dtype=int)
     dx = d[0::2]
@@ -34,8 +35,8 @@ parser.add_argument('-i', '--ip', type=str, default='100.100.101.101',
                     help='IP address to which to bind')
 parser.add_argument('-d', '--data', action='store_true',
                     help='Use this flag to print packet data')
-parser.add_argument('-t', '--timestamps', action='store_true',
-                    help='Use this flag to print packet timestamps')
+parser.add_argument('--headers', action='store_true',
+                    help='Use this flag to print packet headers')
 parser.add_argument('-n', '--nsample', type=int, default=256,
                     help='Number of samples (per polarization) per packet')
 parser.add_argument('--outfile', type=str, default=None,
@@ -65,8 +66,8 @@ try:
         if args.outfile is not None:
             fhx.write("%d,%s\n" % (t, ",".join(["%d" % v for v in x])))
             fhy.write("%d,%s\n" % (t, ",".join(["%d" % v for v in y])))
-        if args.timestamps:
-            print(t)
+        if args.headers:
+            print("packet header:", h)
         if args.data:
             print("X:", x[0:10])
             print("Y:", y[0:10])

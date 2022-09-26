@@ -42,6 +42,24 @@ class T0743Adc2Tge():
 		self.fpgfile = fpgfile
 		self.cfpga.get_system_information(fpgfile)
 
+	def get_build_time(self):
+		"""
+		Get Unix time of firmware build.
+
+		:return: UNIX time in seconds since UNIX epoch.
+		:rtype: int
+		"""
+		return self.cfpga.read_uint("build_time")
+
+	def get_firmware_version(self):
+		"""
+		Get firmware version.
+
+		:return: Firmware version number
+		:rtype: int
+		"""
+		return self.cfpga.read_uint("version")
+
 	def program_fpga(self, fpgfile=None):
 		"""
 		Program the FPGA with the provided fpgfile,
@@ -283,3 +301,14 @@ class T0743Adc2Tge():
 		"""
 
 		self.cfpga.write_int("packetize_nwords", nsamples)
+
+	def set_header_field(self, v):
+		"""
+		Set the 16-bit software-defined packet header field to `v`.
+
+		:param v: Value to which header field should be set.
+		:type v: int
+		"""
+		assert v > 0, "Header value must be > 0"
+		assert v < 2**16, "Header value must be < 2^16"
+		self.cfpga.write("packetize_header", v)

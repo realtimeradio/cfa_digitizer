@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 import sys
+import time
 import argparse
 import logging
 import casperfpga
@@ -14,6 +15,7 @@ def run(host, fpgfile,
         skipprog=False,
         source_ip='10.100.100.100',
         samples_per_packet=256,
+				header=0,
         ):
 
     logger = logging.getLogger(__file__)
@@ -25,13 +27,15 @@ def run(host, fpgfile,
     logger.info("Connecting to board with hostname %s" % host)
     cfpga = casperfpga.CasperFpga(host, transport=casperfpga.KatcpTransport)
 
-    logger.info("Instantiating control objet with fpgfile %s" % fpgfile)
+    logger.info("Instantiating control object with fpgfile %s" % fpgfile)
     adze = T0743Adc2Tge(cfpga, fpgfile=fpgfile)
 
     if not skipprog:
         logger.info("Programming FPGA at %s with %s" % (host, fpgfile))
         adze.program_fpga()
 
+    logger.info("Firmware version is %d" % adze.get_firmware_version())
+    logger.info("Firmware build time: %s" % time.ctime(adze.get_build_time()))
     fpga_clock_mhz = adze.cfpga.estimate_fpga_clock()
     logger.info("Estimated FPGA clock is %.2f MHz" % fpga_clock_mhz)
 
@@ -39,7 +43,10 @@ def run(host, fpgfile,
         raise RuntimeError("FPGA doesn't seem to be clocking correctly")
 
     adze.eth_disable() # Stop packet flow before reconfiguring
+    logger.info("Setting packets to size %d samples" % samples_per_packet)
     adze.set_packet_nsamples(samples_per_packet)
+    logger.info("Setting 16-bit header field to %d" % header)
+    adze.set_header_field(header)
     logger.info("Setting packet source IP to %s" % source_ip)
     adze.eth_configure(source_ip)
     adze.eth_reset()
@@ -84,6 +91,8 @@ if __name__ == '__main__':
                         help='10GBe Source IP address, in dotted-quad notation')
     parser.add_argument('-n', dest='samples_per_packet', type=int, default=256,
                         help ='Number of samples (per polarization) to pack in a single UDP packet')
+    parser.add_argument('--header', type=int, default=0,
+                        help ='16-bit header value to place in 10GbE packets')
 
     args = parser.parse_args()
     run(args.host, args.fpgfile,
@@ -94,5 +103,6 @@ if __name__ == '__main__':
         dest_mac=args.dest_mac,
         skipprog=args.skipprog,
         source_ip=args.source_ip,
-        samples_per_packet=args.samples_per_packet
+        samples_per_packet=args.samples_per_packet,
+				header=args.header,
         )

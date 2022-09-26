@@ -6,9 +6,10 @@ UDP/IP packets.
 
 ## Output format
 
-UDP packet payloads are network- (big-) endian, and comprise a 64-bit timestamp,
+UDP packet payloads are network- (big-) endian, and comprise a 48-bit timestamp,
 which counts samples since the last board synchronisation event (see the
-control software's `arm_timestamp_reset()` method), followed by a
+control software's `arm_timestamp_reset()` method), followed by a 16-bit
+runtime-configurable header field, followed by a
 runtime-configurable number of ADC samples. These samples alternate between the
 two ADC channels.
 ADC data are presented as 16-bit integers, MSB-aligned with the native ADC
@@ -29,6 +30,7 @@ def decode_packet(raw_udp_payload, nsamples):
 
 		returns:
 				t: Packet timestamp (int)
+				h: Packet user-defined 16-bit header (int)
 				d0: List of samples from ADC channel 0, running from timestamp t to
 						timestamp t+n-1
 				d1: List of samples from ADC channel 1, running from timestamp t to
@@ -38,7 +40,9 @@ def decode_packet(raw_udp_payload, nsamples):
 		# Unpack the header word   
 		HEADER_SIZE = 8 # Number of bytes in timestamp
 		HEADER_FORMAT = "Q" # Python struct format code (unsigned 64-bit)
-		t = struct.unpack(">%s" % HEADER_FORMAT, raw_udp_payload[0:HEADER_SIZE])
+		x = struct.unpack(">%s" % HEADER_FORMAT, raw_udp_payload[0:HEADER_SIZE])
+    t = (x >> 16) & (2**48 - 1)
+    h = x & (2**16 - 1)
 		# Unpack the rest of the data as ADC samples
 		DATA_FORMAT =	"h" # Python struct format code (signed 16-bit)
     # Unpack two ADC channels at once
@@ -47,7 +51,7 @@ def decode_packet(raw_udp_payload, nsamples):
 		d0 = data_payload[0::2]
 		d1 = data_payload[1::2]
 
-		return t, d0, d1
+		return t, h, d0, d1
 ```
 
 ## Firmware
@@ -116,6 +120,8 @@ optional arguments:
   -n SAMPLES_PER_PACKET
                         Number of samples (per polarization) to pack in a
                         single UDP packet (default: 256)
+  --header HEADER       16-bit header value to place in 10GbE packets
+                        (default: 0)
 ```
 
 ### Data Capture Software
@@ -137,8 +143,7 @@ optional arguments:
   -P PORT, --port PORT  UDP port to which to listen (default: 10000)
   -i IP, --ip IP        IP address to which to bind (default: 100.100.101.101)
   -d, --data            Use this flag to print packet data (default: False)
-  -t, --timestamps      Use this flag to print packet timestamps (default:
-                        False)
+  --headers             Use this flag to print packet headers (default: False)
   -n NSAMPLE, --nsample NSAMPLE
                         Number of samples (per polarization) per packet
                         (default: 256)

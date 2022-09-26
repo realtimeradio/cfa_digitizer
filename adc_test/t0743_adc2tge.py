@@ -43,7 +43,7 @@ class T0743Adc2Tge():
 		try:
 			self.cfpga.get_system_information(fpgfile)
 		except:
-			print("Could not process fpgfile %s. Maybe the FPGA is not programmed yet?")
+			print("Could not process fpgfile %s. Maybe the FPGA is not programmed yet?" % fpgfile)
 
 	def get_build_time(self):
 		"""

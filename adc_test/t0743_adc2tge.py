@@ -184,8 +184,8 @@ class T0743Adc2Tge():
 		Yacc = None
 		for i in range(nacc):
 			x, y = self.get_adc_snapshot(use_pps_trigger=False)
-			X = np.fft.rfft(x)
-			Y = np.fft.rfft(y)
+			X = np.abs(np.fft.rfft(x))**2
+			Y = np.abs(np.fft.rfft(y))**2
 			if Xacc is None:
 				Xacc = X
 			else:

@@ -312,6 +312,6 @@ class T0743Adc2Tge():
 		:param v: Value to which header field should be set.
 		:type v: int
 		"""
-		assert v > 0, "Header value must be > 0"
+		assert v >= 0, "Header value must be >= 0"
 		assert v < 2**16, "Header value must be < 2^16"
 		self.cfpga.write_int("packetize_header", v)

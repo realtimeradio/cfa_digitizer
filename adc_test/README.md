@@ -18,40 +18,38 @@ always zero.
 
 A simple method to read a packet of data in python is:
 
-```
+```python
 import struct
 def decode_packet(raw_udp_payload, nsamples):
     """
     parameters:
-				raw_udp_payload: The raw UDP payload binary string, obtained from
-												 socket.recv()
-				nsaples: The number of samples (for each of the two ADC channels)
-								 in a packet.
+        raw_udp_payload: The raw UDP payload binary string, obtained from socket.recv()
+        nsamples: The number of samples (for each of the two ADC channels) in a packet
 
-		returns:
-				t: Packet timestamp (int)
-				h: Packet user-defined 16-bit header (int)
-				d0: List of samples from ADC channel 0, running from timestamp t to
-						timestamp t+n-1
-				d1: List of samples from ADC channel 1, running from timestamp t to
-						timestamp t+n-1
-		"""
+    returns:
+        t: Packet timestamp (int)
+        h: Packet user-defined 16-bit header (int)
+        d0: List of samples from ADC channel 0, running from timestamp t to
+            timestamp t+n-1
+	d1: List of samples from ADC channel 1, running from timestamp t to
+            timestamp t+n-1
+    """
 
-		# Unpack the header word   
-		HEADER_SIZE = 8 # Number of bytes in timestamp
-		HEADER_FORMAT = "Q" # Python struct format code (unsigned 64-bit)
-		x = struct.unpack(">%s" % HEADER_FORMAT, raw_udp_payload[0:HEADER_SIZE])
-		t = (x >> 16) & (2**48 - 1)
-		h = x & (2**16 - 1)
-		# Unpack the rest of the data as ADC samples
-		DATA_FORMAT =	"h" # Python struct format code (signed 16-bit)
-		# Unpack two ADC channels at once
-		data_payload = struct.unpack(">%d%s" % (2*nsamples, DATA_FORMAT), raw_udp_payload[HEADER_SIZE:])
-		# De-interleave the two ADC channels
-		d0 = data_payload[0::2]
-		d1 = data_payload[1::2]
+    # Unpack the header word   
+    HEADER_SIZE = 8 # Number of bytes in timestamp
+    HEADER_FORMAT = "Q" # Python struct format code (unsigned 64-bit)
+    x = struct.unpack(">%s" % HEADER_FORMAT, raw_udp_payload[0:HEADER_SIZE])
+    t = (x >> 16) & (2**48 - 1)
+    h = x & (2**16 - 1)
+    # Unpack the rest of the data as ADC samples
+    DATA_FORMAT = "h" # Python struct format code (signed 16-bit)
+    # Unpack two ADC channels at once
+    data_payload = struct.unpack(">%d%s" % (2*nsamples, DATA_FORMAT), raw_udp_payload[HEADER_SIZE:])
+    # De-interleave the two ADC channels
+    d0 = data_payload[0::2]
+    d1 = data_payload[1::2]
 
-		return t, h, d0, d1
+    return t, h, d0, d1
 ```
 
 ## Configuring the design
